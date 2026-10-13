@@ -1,0 +1,20 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* sortArrayByParity(int* nums, int numsSize, int* returnSize) {
+    int j=0;
+    for(int i=0;i<numsSize;i++)
+    {
+        if(nums[i]%2==0)
+        {
+            int temp=nums[i];
+            nums[i]=nums[j];
+            nums[j++]=temp;
+
+        }
+    }
+    *returnSize=numsSize;
+    return nums;
+
+    
+}
