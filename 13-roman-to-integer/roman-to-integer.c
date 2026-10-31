@@ -1,40 +1,17 @@
 int romanToInt(char* s) {
-    int res = 0;  // Stores the final integer value
-    int prev = 0;  // Stores the previous Roman numeral value
+    int roman[256] = {0}; // Array to store values for each character
+    roman['I'] = 1; roman['V'] = 5; roman['X'] = 10;
+    roman['L'] = 50; roman['C'] = 100; roman['D'] = 500; roman['M'] = 1000;
 
-    // Array containing Roman numeral characters
-    char roman[7] = {'I', 'V', 'X', 'L', 'C', 'D', 'M'};
-
-    // Array containing corresponding integer values
-    int val[7] = {1, 5, 10, 50, 100, 500, 1000};
-
-    // Traverse the string from right to left
-    for (int i = strlen(s) - 1; i >= 0; i--) {
-
-        // Find the integer value of the current Roman character
-        for (int j = 0; j < 7; j++) {
-
-            if (s[i] == roman[j]) {
-
-                // If current value is smaller than the previous value,
-                // subtract it because it represents a subtractive notation
-                if (val[j] < prev) {
-                    res -= prev;
-                    prev -= val[j];
-                    res += prev;
-                }
-
-                // Otherwise, add the current value to the result
-                else {
-                    res += val[j];
-
-                    // Update the previous value
-                    prev = val[j];
-                }
-            }
+    int ans = roman[s[strlen(s) - 1]]; // Start with the last character
+    
+    for (int i = strlen(s) - 2; i >= 0; i--) {
+        if (roman[s[i]] >= roman[s[i + 1]]) {
+            ans += roman[s[i]];
+        } else {
+            ans -= roman[s[i]];
         }
     }
-
-    // Return the final integer value
-    return res;
+    
+    return ans;
 }
