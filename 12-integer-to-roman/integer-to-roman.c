@@ -1,30 +1,20 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 char* intToRoman(int num) {
-    int nums[] = {1,4,5,9,10,40,50,90,100,400,500,900,1000};
-    char *roman[] = {"I","IV","V","IX","X","XL","L","XC","C","CD","D","CM","M"};
-    int i=12,j=0;
-    char*c = malloc(16 * sizeof(char));
-    int size=0;
-        while( i >= 0)
-        {
-            while( num - nums[i] >= 0)
-            {
-                j=0;
-                while ( roman[i][j] != '\0')
-                {
-                c[size] = roman[i][j];
-                size++;  
-                j++;
-                }
-                num -= nums[i];       
-                if ( num == 0)
-                {
-                    c[size] = '\0';
-                    return c;
-                }          
-            }
-            i--;
+    int values[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+    char* symbols[] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+    
+    char* result = (char*)malloc(20 * sizeof(char));  // Max length needed
+    result[0] = '\0';  // Initialize empty string
+    
+    for (int i = 0; i < 13; i++) {
+        while (num >= values[i]) {
+            strcat(result, symbols[i]);
+            num -= values[i];
         }
-    return c;
+    }
+    
+    return result;
 }
