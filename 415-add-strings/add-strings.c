@@ -1,29 +1,35 @@
+#include <stdlib.h>
+#include <string.h>
+
 char* addStrings(char* num1, char* num2) {
-    int i = strlen(num1) - 1, j = strlen(num2) - 1, carry = 0;
-    char* ans = (char*)malloc(10001 * sizeof(char)); 
+    int i = strlen(num1) - 1;
+    int j = strlen(num2) - 1;
 
-    int k = 0; 
+    int n = strlen(num1);
+    int m = strlen(num2);
 
-    while (i >= 0 || j >= 0 || carry == 1) {
-        if (i >= 0) {
-            carry += num1[i] - '0';
-            i--;
-        }
-        if (j >= 0) {
-            carry += num2[j] - '0';
-            j--;
-        }
-        ans[k] = (carry % 10) + '0';
-        carry /= 10;
-        k++;
+    int max = (n > m ? n : m);
+
+    char *result = (char*)malloc((max + 2) * sizeof(char));
+
+    int k = max;
+    result[max + 1] = '\0';
+
+    int carry = 0;
+
+    while (i >= 0 || j >= 0 || carry) {
+        int sum = carry;
+
+        if (i >= 0)
+            sum += num1[i--] - '0';
+
+        if (j >= 0)
+            sum += num2[j--] - '0';
+
+        result[k--] = (sum % 10) + '0';
+
+        carry = sum / 10;
     }
 
-    ans[k] = '\0'; 
-    for (int m = 0, n = k - 1; m < n; m++, n--) {
-        char temp = ans[m];
-        ans[m] = ans[n];
-        ans[n] = temp;
-    }
-
-    return ans;
+    return result + k + 1;
 }
