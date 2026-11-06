@@ -1,24 +1,20 @@
 char* convert(char* s, int numRows) {
-    int n = strlen(s) ;
-    char *ans = malloc((n + 1)*sizeof(char)) ;
-    *ans = '\0' ;
-    char *temp = calloc(2,sizeof(char)) ;
-    if(numRows == 1 || numRows == n){
-        for(int i = 0 ; i < n ; i++){
-            *temp = *(s + i) ;
-            strcat(ans,temp) ;
+    int n = strlen(s);
+    if (numRows == 1 || numRows >= n) return s;
+
+    int cycleLen = 2 * numRows - 2;
+    char* result = (char*)malloc(n + 1);
+    int k = 0;
+
+    for (int i = 0; i < numRows; i++) {
+        for (int j = 0; j + i < n; j += cycleLen) {
+            result[k++] = s[j + i]; // vertical char
+            if (i != 0 && i != numRows - 1 && j + cycleLen - i < n) {
+                result[k++] = s[j + cycleLen - i]; // diagonal char
+            }
         }
-        return ans ;
     }
-    for(int j = 0 ; j < numRows ; j++){
-        int i = 0 ;
-        while(i < n){
-        if((i - j)%(2*numRows - 2) == 0 || (i + j)%(2*numRows - 2) == 0){
-            *temp = *(s + i) ;
-            strcat(ans,temp) ;
-        }
-        i++ ;
-    }
-    }
-    return ans ;
+
+    result[k] = '\0';
+    return result;
 }
