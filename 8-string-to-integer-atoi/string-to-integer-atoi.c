@@ -1,35 +1,31 @@
 int myAtoi(char* s) {
-    int i = 0;
-    int sign = 1;
-    long long num = 0;
+    long long result = 0;   // Accumulator (long long avoids UB while parsing)
+    int sign = 1;           // Default positive
 
-    // Step 1: Skip leading spaces
-    while (s[i] == ' ') {
-        i++;
+    // 1. Skip leading spaces
+    while (*s == ' ') {
+        s++;
     }
 
-    // Step 2: Check sign
-    if (s[i] == '-') {
-        sign = -1;
-        i++;
-    }
-    else if (s[i] == '+') {
-        i++;
+    // 2. Handle optional sign
+    if (*s == '+' || *s == '-') {
+        if (*s == '-') sign = -1;
+        s++;
     }
 
-    // Step 3: Convert digits
-    while (s[i] >= '0' && s[i] <= '9') {
-        num = num * 10 + (s[i] - '0');
+    // 3. Read digits
+    while (isdigit((unsigned char)*s)) {
+        int digit = *s - '0';
 
-        // Step 4: Check overflow
-        if (sign == 1 && num > 2147483647)
-            return 2147483647;
+        // 4. Pre-check for overflow before updating result
+        if (result > INT_MAX / 10 || 
+           (result == INT_MAX / 10 && digit > (sign == 1 ? 7 : 8))) {
+            return (sign == 1) ? INT_MAX : INT_MIN;
+        }
 
-        if (sign == -1 && num > 2147483648LL)
-            return -2147483647 - 1;
-
-        i++;
+        result = result * 10 + digit;  // Safe to update
+        s++;
     }
 
-    return (int)(num * sign);
+    return (int)(sign * result);
 }
